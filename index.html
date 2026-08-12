@@ -74,7 +74,8 @@
 <script type="module">
     import { GoogleGenAI } from "https://cdn.jsdelivr.net/npm/@google/genai@latest/+esm";
 
-    const API_KEY = "AQ.Ab8RN6KoiqxKaoQYliKs6YPRTgkVvaoCRZ4bP7vyWGGaw8-ZMg";
+    // আপনার জেনারেট করা এপিআই কি এখানে বসান
+    const API_KEY = "AQ.Ab8RN6I5Kyjxn6YMpDvSIH_9ESI05aBy3_T58aCfU0M-Q60mRA";
     const MODEL = "gemini-2.5-flash";
     const ai = new GoogleGenAI({ apiKey: API_KEY });
 
@@ -115,7 +116,7 @@
                 }
 
                 if (!text || !text.trim()) {
-                    statusMsg.innerText = `"${file.name}" থেকে কোনো টেক্সট পাওয়া যায়নি (স্ক্যান করা ছবি-ভিত্তিক PDF হলে টেক্সট বের হবে না)।`;
+                    statusMsg.innerText = `"${file.name}" থেকে কোনো টেক্সট পাওয়া যায়নি।`;
                     continue;
                 }
 
@@ -188,7 +189,7 @@
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(kbDocs));
         } catch (e) {
-            alert("স্টোরেজ ভরে গেছে (browser limit ~5-10MB)। পুরনো কিছু ফাইল ডিলিট করুন।");
+            alert("স্টোরেজ ভরে গেছে। পুরনো কিছু ফাইল ডিলিট করুন।");
         }
     }
 
@@ -301,14 +302,14 @@
             const context = getRelevantContext(question);
             const prompt = `আপনি একজন সহায়ক অ্যাসিস্ট্যান্ট। নিচে কিছু ডকুমেন্ট থেকে নেওয়া তথ্য দেওয়া হলো। শুধু এই তথ্যের ভিত্তিতে প্রশ্নের সঠিক ও নির্ভুল উত্তর দিন। তথ্যে না থাকলে স্পষ্ট করে বলুন "এই তথ্য ডকুমেন্টে পাওয়া যায়নি"।\n\n--- ডকুমেন্ট থেকে তথ্য ---${context}\n\n--- প্রশ্ন ---\n${question}`;
 
-            const result = await ai.models.generateContent({
+            const response = await ai.models.generateContent({
                 model: MODEL,
                 contents: prompt
             });
 
             document.getElementById(loadingId).remove();
 
-            const answer = result?.text;
+            const answer = response.text;
             if (answer) {
                 chatBox.innerHTML += `<div class="bot-message message">${escapeHtml(answer)}</div>`;
             } else {
@@ -327,7 +328,6 @@
         return String(text).replace(/[&<>"']/g, m => map[m]);
     }
 
-    // onclick হ্যান্ডলারগুলো এই ফাংশনগুলো খুঁজে পাওয়ার জন্য গ্লোবালি জুড়ে দেওয়া হলো (module scope ফিক্স)
     window.processFiles = processFiles;
     window.filterDocs = filterDocs;
     window.sendQuery = sendQuery;
