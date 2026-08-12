@@ -326,4 +326,11 @@
         const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
         return String(text).replace(/[&<>"']/g, m => map[m]);
     }
+
+    // onclick হ্যান্ডলারগুলো এই ফাংশনগুলো খুঁজে পাওয়ার জন্য গ্লোবালি জুড়ে দেওয়া হলো (module scope ফিক্স)
+    window.processFiles = processFiles;
+    window.filterDocs = filterDocs;
+    window.sendQuery = sendQuery;
+    window.toggleSelect = toggleSelect;
+    window.deleteDoc = deleteDoc;
 </script>
